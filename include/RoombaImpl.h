@@ -16,6 +16,8 @@
 
 #include "Roomba.h"
 
+#include <endian.h>
+
 namespace ssr {
 
   /**
@@ -224,11 +226,11 @@ namespace ssr {
     }
 
     virtual uint16_t getSensorValueUINT16(const uint8_t sensorId, const uint32_t timeout_us=ROOMBA_INFINITE) {
-      return m_Protocol.getSensorValue<uint16_t>(sensorId, timeout_us);
+      return be16toh(m_Protocol.getSensorValue<uint16_t>(sensorId, timeout_us);
     }
 
     virtual int16_t getSensorValueINT16(const uint8_t sensorId, const uint32_t timeout_us=ROOMBA_INFINITE) {
-      return m_Protocol.getSensorValue<int16_t>(sensorId, timeout_us);
+      return be16toh(m_Protocol.getSensorValue<int16_t>(sensorId, timeout_us));
     }
 
 

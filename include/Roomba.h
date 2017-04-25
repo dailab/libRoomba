@@ -4,8 +4,6 @@
 #include "op_code.h"
 #include "type.h"
 
-#include <endian.h>
-
 #define ROOMBA_API
 
 namespace ssr {
@@ -705,7 +703,7 @@ namespace ssr {
      * @return distance in millimeters
      */
      int16_t getDistance(const uint32_t timeout_us=ROOMBA_INFINITE) {
-      return be16toh(getSensorValueINT16(DISTANCE, timeout_us));
+      return getSensorValueINT16(DISTANCE, timeout_us);
     }
     
     /**
