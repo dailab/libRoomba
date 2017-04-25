@@ -8,6 +8,8 @@ using namespace ssr;
 Transport::Transport(const char* portName, const uint32_t baudrate) {
   m_pSerialPort = new SerialPort(portName, baudrate);
   m_pBuffer = new uint8_t[256];
+
+	m_pSerialPort->FlushRxBuffer();
 }
 
 
