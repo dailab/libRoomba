@@ -1,6 +1,7 @@
 #pragma once
 #include "type.h"
 #include "Roomba.h"
+#include <string.h>
 
 namespace ssr {
   class ROOMBA_API Packet {
