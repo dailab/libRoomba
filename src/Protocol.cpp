@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Protocol.h"
 
+#include <endian.h>
+
 using namespace ssr;
 
 Protocol::Protocol(RoombaImpl* pRoomba, Transport* pTransport, 
@@ -249,12 +251,14 @@ void Protocol::processOdometry(void)
 {
   uint32_t timeout_us = 1*1000*1000;
   if(m_Version == VERSION_500_SERIES) {
-    m_pOdometry->updatePositionEncoder(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us),
-				     getSensorValue<uint16_t>(LEFT_ENCODER_COUNTS, timeout_us),
+    m_pOdometry->updatePositionEncoder(
+				be16toh(getSensorValue<uint16_t>(RIGHT_ENCODER_COUNTS, timeout_us)),
+				be16toh(getSensorValue<uint16_t>(LEFT_ENCODER_COUNTS, timeout_us)),
 					 m_Timer.getTimeOfDay().getUsec());
   } else {
-    m_pOdometry->updatePositionAngleDistance(getSensorValue<uint16_t>(DISTANCE, timeout_us),
-					   getSensorValue<uint16_t>(ANGLE, timeout_us)*3.141592 / 180.0,
+    m_pOdometry->updatePositionAngleDistance(
+				be16toh(getSensorValue<uint16_t>(DISTANCE, timeout_us)),
+				be16toh(getSensorValue<uint16_t>(ANGLE, timeout_us))*3.141592 / 180.0,
 					   m_Timer.getTimeOfDay().getUsec());
   }
 }
