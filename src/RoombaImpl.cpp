@@ -287,3 +287,86 @@ void RoombaImpl::runAsync()
 	}
 }
 */
+
+
+void RoombaImpl::turn(int16_t angle, uint16_t speed)
+{
+	int acc_angle=0;
+	//std::cout << __PRETTY_FUNCTION__ << ": angle=" << angle << ", speed=" << speed << std::endl;
+
+	if(angle==0){
+		return;
+	}
+
+	int16_t radius;
+	if(angle < 0){
+		radius = -1;
+	} else{
+		radius = 1;
+	}
+
+	drive(speed, radius);
+
+	bool done=false;
+	int16_t a;
+	while(!done){
+		Thread::Sleep(10);
+		a = getSensorValueINT16(ANGLE);
+		acc_angle+=a;
+		//std::cout << "angle=" << a << " -> " << acc_angle << std::endl;
+
+		if(angle < 0){
+			if(acc_angle <= angle){
+				// done
+				done = true;
+			}
+		} else{
+			if(acc_angle >= angle){
+				// done
+				done = true;
+			}
+		}
+	}
+
+	drive(0,0);
+
+	// flush sensor value;
+	getSensorValueINT16(ANGLE);
+}
+
+void RoombaImpl::move(int16_t distance, uint16_t speed, int16_t radius)
+{
+	int16_t acct_dist = 0;
+	int16_t driving_speed;
+
+	if(distance >=0){
+		driving_speed = speed;
+	} else{
+		driving_speed = -speed;
+	}
+
+	drive(driving_speed, radius);
+	bool done=false;
+	int16_t d;
+	while(!done){
+		Thread::Sleep(10);
+		d = getSensorValueINT16(DISTANCE);
+		acct_dist+=d;
+		//std::cout << "distance=" << d << " -> " << acct_dist << std::endl;
+
+		if(distance < 0){
+			if(acct_dist <= distance){
+				// done
+				done = true;
+			}
+		} else{
+			if(acct_dist >= distance){
+				// done
+				done = true;
+			}
+		}
+	}
+	drive(0,0);
+
+	getSensorValueINT16(DISTANCE);
+}

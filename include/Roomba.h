@@ -239,6 +239,23 @@ namespace ssr {
      */
     virtual void setLED(uint8_t leds, uint8_t intensity, uint8_t color = 127) = 0;
 
+		/**
+		 * @brief Turn Roomba on place
+		 * 
+		 * @param angle Angle in degree (positive: counter-clockwise; negative: clockwise)
+		 * @param speed 
+		 */
+		virtual void turn(int16_t angle, uint16_t speed = 10) = 0;
+
+		/**
+		 * @brief Move Roomba a specified distance
+		 * 
+		 * @param distance Distance in [mm]
+		 * @param speed Speed in [mm/s]
+		 * @param radius Radius in [rad/s]
+		 */
+		 virtual void move(int16_t distance, uint16_t speed = 100, int16_t radius = 0) = 0;
+
   protected:
     /**
      * @brief Get Current Velocity for primitive types.

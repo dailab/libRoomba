@@ -144,6 +144,9 @@ namespace ssr {
      */
     virtual void setTargetVelocity(const double trans, const double rotate);
     
+    virtual void turn(int16_t angle, uint16_t speed);
+    virtual void move(int16_t distance, uint16_t speed, int16_t radius);
+
   public:
 
     /**
