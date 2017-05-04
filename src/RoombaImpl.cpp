@@ -74,6 +74,7 @@ void RoombaImpl::setMode(Mode mode)
   }
   
   //Thread::Sleep(100);
+  Thread::Sleep(25);
 }
 
 void RoombaImpl::drive(int16_t translation, int16_t turnRadius) {
@@ -308,12 +309,26 @@ void RoombaImpl::turn(int16_t angle, uint16_t speed)
 	drive(speed, radius);
 
 	bool done=false;
-	int16_t a;
+	int16_t a = 0;
+	uint16_t timeout_cnt = 0;
 	while(!done){
-		Thread::Sleep(10);
-		a = getSensorValueINT16(ANGLE);
+		Thread::Sleep(50);
+
+		try{
+			a = getSensorValueINT16(ANGLE, 100*1000);
+			timeout_cnt = 0;
+		} catch(TimeoutException& e){
+			std::cerr << e.what() << std::endl;
+			a = 0;
+			timeout_cnt++;
+		}
+
+		if(timeout_cnt >= 5){
+			std::cout << "got too many timeouts, aborting..." << std::endl;
+			break;
+		}
 		acc_angle+=a;
-		//std::cout << "angle=" << a << " -> " << acc_angle << std::endl;
+		std::cout << "angle=" << a << " -> " << acc_angle << std::endl;
 
 		if(angle < 0){
 			if(acc_angle <= angle){
@@ -331,7 +346,11 @@ void RoombaImpl::turn(int16_t angle, uint16_t speed)
 	drive(0,0);
 
 	// flush sensor value;
-	getSensorValueINT16(ANGLE);
+	getSensorValueINT16(ANGLE, 1000*1000);
+
+	if(!done){
+		throw TimeoutException();
+	}
 }
 
 void RoombaImpl::move(int16_t distance, uint16_t speed, int16_t radius)
@@ -349,7 +368,7 @@ void RoombaImpl::move(int16_t distance, uint16_t speed, int16_t radius)
 	bool done=false;
 	int16_t d;
 	while(!done){
-		Thread::Sleep(10);
+		Thread::Sleep(25);
 		d = getSensorValueINT16(DISTANCE);
 		acct_dist+=d;
 		//std::cout << "distance=" << d << " -> " << acct_dist << std::endl;

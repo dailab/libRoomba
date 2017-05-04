@@ -688,29 +688,65 @@ namespace ssr {
     }
 
     /**
-     * @brief Get Current
-     *
-     * @return current in milli amps (mA)
-     */
-    uint16_t getCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
-      return getSensorValueUINT16(CURRENT, timeout_us);
-    }
-
-    /**
      * @brief Get Right Wheel's Encoder Count
      *
      * @return Encoder Count (0-65535)
      */
-     uint16_t getRightEncoderCounts(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    uint16_t getRightEncoderCounts(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueUINT16(RIGHT_ENCODER_COUNTS, timeout_us);
     }
       
+    /**
+     * @brief Get Current
+     *
+     * @return current in milli amps (mA)
+     */
+    int16_t getCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
+      return getSensorValueINT16(CURRENT, timeout_us);
+    }
+
+    /**
+     * @brief Get Right Motor Current
+     *
+     * @return current in milli amps (mA)
+     */
+    int16_t getRightMotorCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
+      return getSensorValueINT16(RIGHT_MOTOR_CURRENT, timeout_us);
+    }
+
+    /**
+     * @brief Get Left Motor Current
+     *
+     * @return current in milli amps (mA)
+     */
+    int16_t getLeftMotorCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
+      return getSensorValueINT16(LEFT_MOTOR_CURRENT, timeout_us);
+    }
+
+    /**
+     * @brief Get Main Brush Motor Current
+     *
+     * @return current in milli amps (mA)
+     */
+    int16_t getMainBrushMotorCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
+      return getSensorValueINT16(MAIN_BRUSH_MOTOR_CURRENT, timeout_us);
+    }
+
+    /**
+     * @brief Get Side Brush Motor Current
+     *
+     * @return current in milli amps (mA)
+     */
+    int16_t getSideBrushMotorCurrent(const uint32_t timeout_us=ROOMBA_INFINITE) {
+      return getSensorValueINT16(SIDE_BRUSH_MOTOR_CURRENT, timeout_us);
+    }
+
     /**
      * @brief Get Left Wheel's Encoder Count
      *
      * @return Encoder Count (0-65535)
      */
-     uint16_t getLeftEncoderCounts(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    uint16_t getLeftEncoderCounts(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueUINT16(LEFT_ENCODER_COUNTS, timeout_us);
     }
 
@@ -719,7 +755,7 @@ namespace ssr {
      *
      * @return distance in millimeters
      */
-     int16_t getDistance(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    int16_t getDistance(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueINT16(DISTANCE, timeout_us);
     }
     
@@ -728,7 +764,7 @@ namespace ssr {
      *
      * @return angle in degrees
      */
-     int16_t getAngle(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    int16_t getAngle(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueINT16(ANGLE, timeout_us);
     }
 
@@ -737,7 +773,7 @@ namespace ssr {
      *
      * @return requested translational velocity (mm/s)
      */
-     int16_t getRequestedVelocity(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    int16_t getRequestedVelocity(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueINT16(REQUESTED_VELOCITY, timeout_us);
     }
     
@@ -746,10 +782,17 @@ namespace ssr {
      *
      * @return requested translational radius (mm)
      */
-     int16_t getRequestedRadius(const uint32_t timeout_us=ROOMBA_INFINITE) {
+    int16_t getRequestedRadius(const uint32_t timeout_us=ROOMBA_INFINITE) {
       return getSensorValueINT16(REQUESTED_RADIUS, timeout_us);
     }
 
+		bool isHome(const uint32_t timeout_us = ROOMBA_INFINITE) {
+			uint8_t cs_available;
+
+			cs_available = getSensorValueUINT8(CHARGING_SOURCE_AVAILABLE, timeout_us);
+
+			return cs_available & 0x02;
+		}
 
   };
 }
