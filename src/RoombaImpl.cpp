@@ -312,10 +312,16 @@ void RoombaImpl::turn(int16_t angle, uint16_t speed)
 	int16_t a = 0;
 	uint16_t timeout_cnt = 0;
 	while(!done){
-		Thread::Sleep(50);
+		Thread::Sleep(25);
 
 		try{
 			a = getSensorValueINT16(ANGLE, 100*1000);
+
+			if((a>360) || (a<-360)){
+				// seems to be wrong...
+				std::cerr << "got wrong angle value: " << a << std::endl;
+				a = 0;
+			}
 			timeout_cnt = 0;
 		} catch(TimeoutException& e){
 			std::cerr << e.what() << std::endl;

@@ -39,6 +39,10 @@ namespace ssr {
 		  Thread::Sleep(30);
 	  }
     }
+
+		void FlushRxBuffer(){
+			m_pSerialPort->FlushRxBuffer();
+		}
     
     Packet ReceivePacket(const uint32_t requestSize, const uint32_t timeout = ROOMBA_INFINITE);
     void ReceiveData(uint8_t *pData, const uint32_t requestSize, const uint32_t timeout = ROOMBA_INFINITE) ;

@@ -74,6 +74,7 @@ namespace ssr {
 			  return data;
 		  }
 	  } else {
+			m_pTransport->FlushRxBuffer();
 		  m_pTransport->SendPacket(OP_SENSORS, &sensorId, 1);
 		  m_pTransport->ReceiveData((uint8_t*)&data, sizeof(T), timeout);
 	  }
